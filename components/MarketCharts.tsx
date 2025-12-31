@@ -1,21 +1,27 @@
 
 import React from 'react';
-import { MarketSector } from '../types';
+import { MarketSector, Language, Translations } from '../types';
 import { 
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell 
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
 import { BarChart3 } from 'lucide-react';
 
 interface MarketChartsProps {
   sector: MarketSector;
+  language: Language;
 }
 
-const MarketCharts: React.FC<MarketChartsProps> = ({ sector }) => {
-  // Simulated dynamic data based on sector
+const MarketCharts: React.FC<MarketChartsProps> = ({ sector, language }) => {
+  const t = Translations[language];
+
   const generateData = () => {
     const base = Math.random() * 100;
+    const days = language === Language.CN 
+      ? ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+      : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    
     return Array.from({ length: 7 }, (_, i) => ({
-      name: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i],
+      name: days[i],
       value: Number((base + Math.random() * 20 - 10).toFixed(2)),
     }));
   };
@@ -23,15 +29,15 @@ const MarketCharts: React.FC<MarketChartsProps> = ({ sector }) => {
   const data = generateData();
 
   return (
-    <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+    <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-emerald-500" />
-          <h2 className="text-lg font-bold">Indicator Trends</h2>
+          <h2 className="text-lg font-bold">{t.indicator_trends}</h2>
         </div>
         <select className="bg-slate-800 text-xs border-none rounded-lg px-2 py-1 outline-none text-slate-400">
-          <option>Last 7 Days</option>
-          <option>Last 30 Days</option>
+          <option>{t.last_7_days}</option>
+          <option>{t.last_30_days}</option>
         </select>
       </div>
 
@@ -75,15 +81,15 @@ const MarketCharts: React.FC<MarketChartsProps> = ({ sector }) => {
 
       <div className="grid grid-cols-2 gap-4 mt-8">
         <div className="p-4 bg-slate-800/50 rounded-xl border border-slate-700/50">
-          <p className="text-xs text-slate-500 mb-1">Current Volatility</p>
+          <p className="text-xs text-slate-500 mb-1">{t.volatility}</p>
           <p className="text-xl font-black text-slate-100">12.4%</p>
           <div className="w-full bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
             <div className="bg-emerald-500 h-full w-[40%]" />
           </div>
         </div>
         <div className="p-4 bg-slate-800/50 rounded-xl border border-slate-700/50">
-          <p className="text-xs text-slate-500 mb-1">Market Sentiment</p>
-          <p className="text-xl font-black text-slate-100">Bullish</p>
+          <p className="text-xs text-slate-500 mb-1">{t.sentiment}</p>
+          <p className="text-xl font-black text-slate-100">{t.bullish}</p>
           <div className="w-full bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
             <div className="bg-blue-500 h-full w-[75%]" />
           </div>

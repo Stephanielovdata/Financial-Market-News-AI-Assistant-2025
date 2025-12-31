@@ -1,21 +1,22 @@
 
 import React from 'react';
-import { GroundingChunk } from '../types';
+import { GroundingChunk, Language, Translations } from '../types';
 import { Newspaper, ExternalLink, ChevronRight } from 'lucide-react';
 
 interface NewsListProps {
   sources: GroundingChunk[];
+  language: Language;
 }
 
-const NewsList: React.FC<NewsListProps> = ({ sources }) => {
-  // Filter out chunks that don't have web info
+const NewsList: React.FC<NewsListProps> = ({ sources, language }) => {
+  const t = Translations[language];
   const newsItems = sources.filter(s => s.web);
 
   return (
-    <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+    <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
       <div className="flex items-center gap-2 mb-6">
         <Newspaper className="w-5 h-5 text-orange-500" />
-        <h2 className="text-lg font-bold">Source Intelligence</h2>
+        <h2 className="text-lg font-bold">{t.sources}</h2>
       </div>
 
       <div className="space-y-4">
@@ -43,13 +44,13 @@ const NewsList: React.FC<NewsListProps> = ({ sources }) => {
           ))
         ) : (
           <div className="py-10 text-center">
-            <p className="text-slate-500 text-sm">Searching for direct source links...</p>
+            <p className="text-slate-500 text-sm">{language === Language.CN ? "正在寻找权威来源链接..." : "Searching for direct source links..."}</p>
           </div>
         )}
       </div>
 
       <button className="w-full mt-6 py-3 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 group">
-        View More Sources <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        {t.view_more} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
       </button>
     </section>
   );

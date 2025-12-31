@@ -1,14 +1,16 @@
 
 import React from 'react';
-import { MarketSector } from '../types';
+import { MarketSector, Language, Translations } from '../types';
 import { Flame, Landmark, Globe2, TrendingUp, Cpu } from 'lucide-react';
 
 interface SidebarProps {
   activeSector: MarketSector;
   onSectorChange: (sector: MarketSector) => void;
+  language: Language;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeSector, onSectorChange }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeSector, onSectorChange, language }) => {
+  const t = Translations[language];
   const sectors = [
     { id: MarketSector.ENERGY, icon: Flame, color: 'text-orange-500' },
     { id: MarketSector.ECONOMY, icon: Landmark, color: 'text-emerald-500' },
@@ -27,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSector, onSectorChange }) => {
         </div>
 
         <nav className="space-y-2">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 px-3">Aggregated Data</p>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 px-3">{t.agg_data}</p>
           {sectors.map((sector) => {
             const Icon = sector.icon;
             const isActive = activeSector === sector.id;
@@ -52,10 +54,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSector, onSectorChange }) => {
       <div className="mt-auto p-6 space-y-4">
         <div className="bg-slate-800/50 p-4 rounded-2xl border border-slate-700/50">
           <h4 className="text-xs font-bold text-slate-300 mb-2 flex items-center gap-2">
-            <Cpu className="w-3 h-3 text-blue-400" /> AI Insights Engine
+            <Cpu className="w-3 h-3 text-blue-400" /> {t.ai_engine}
           </h4>
           <p className="text-[10px] text-slate-500 leading-relaxed">
-            Powered by Gemini 3 with search grounding for real-time Bloomberg & FRED data sync.
+            {t.ai_desc}
           </p>
         </div>
       </div>

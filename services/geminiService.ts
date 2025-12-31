@@ -1,6 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { MarketUpdate, MarketSector } from "../types";
+import { MarketUpdate, MarketSector, Language } from "../types";
 
 export class GeminiService {
   private ai: GoogleGenAI;
@@ -9,8 +9,13 @@ export class GeminiService {
     this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   }
 
-  async fetchMarketSummary(sector: MarketSector): Promise<MarketUpdate> {
+  async fetchMarketSummary(sector: MarketSector, lang: Language): Promise<MarketUpdate> {
+    const languageInstruction = lang === Language.CN 
+      ? "Please provide the entire response in Chinese (Simplified)." 
+      : "Please provide the entire response in English.";
+
     const prompt = `
+      ${languageInstruction}
       Provide a comprehensive financial market summary for today specifically focusing on ${sector}.
       Include:
       1. A professional summary of key events (3-4 paragraphs).
@@ -30,13 +35,13 @@ export class GeminiService {
         },
       });
 
-      const text = response.text || "No summary available at this time.";
+      const text = response.text || (lang === Language.CN ? "目前无法获取摘要。" : "No summary available at this time.");
       const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
 
       return {
         summary: text,
         sources: chunks,
-        timestamp: new Date().toLocaleString(),
+        timestamp: new Date().toLocaleString(lang === Language.CN ? 'zh-CN' : 'en-US'),
       };
     } catch (error) {
       console.error("Error fetching market summary:", error);
