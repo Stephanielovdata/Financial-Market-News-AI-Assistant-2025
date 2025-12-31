@@ -1,0 +1,7 @@
+{
+  "name": "MarketPulse Daily Summary",
+  "description": "A sophisticated financial market intelligence dashboard that aggregates news, summaries, and data from OPEC, EIA, FRED, Bloomberg, and Morningstar using Gemini search grounding.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
